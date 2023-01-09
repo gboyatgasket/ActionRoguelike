@@ -14,6 +14,9 @@ class ACTIONROGUELIKE_API ASCharacter : public ACharacter
 {
 	GENERATED_BODY()
 
+protected:
+	UPROPERTY(EditAnywhere,Category="Ammo Settings")
+	TSubclassOf<AActor> ProjectileClass;
 public:
 	// Sets default values for this character's properties
 	ASCharacter();
@@ -36,7 +39,8 @@ public:
 	void MoveForward(float X);
 
 	void MoveRight(float X);
-
+	
+	void PrimaryAttack();
 	
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
