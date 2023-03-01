@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "SInteractionComponent.h"
 #include "Camera/CameraComponent.h"
 #include "GameFramework/Character.h"
 #include "SCharacter.generated.h"
@@ -28,6 +29,9 @@ protected:
 
 	UPROPERTY(VisibleAnywhere)
 	UCameraComponent* CameraComponent;
+
+	UPROPERTY(VisibleAnywhere)
+	USInteractionComponent* InteractionComponent;
 	
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -40,8 +44,9 @@ public:
 
 	void MoveRight(float X);
 	
-	void PrimaryAttack();
-	
+	void PrimaryAttack() const;
+
+	void PrimaryInteract() const;
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 

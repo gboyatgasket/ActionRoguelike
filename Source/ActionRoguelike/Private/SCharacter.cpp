@@ -2,6 +2,7 @@
 
 #include "ActionRoguelike/Public/SCharacter.h"
 
+#include "ClothingSimulationInteractor.h"
 #include "SMagicProjectile.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "Camera/CameraComponent.h"
@@ -19,6 +20,8 @@ ASCharacter::ASCharacter()
 	
 	CameraComponent = CreateDefaultSubobject<UCameraComponent>("CameraComponent");
 	CameraComponent->SetupAttachment(SpringArmComponent);
+
+	InteractionComponent = CreateDefaultSubobject<USInteractionComponent>("InteractionComponent");
 
 	bUseControllerRotationYaw = false;
 
@@ -53,6 +56,8 @@ void ASCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponen
 	PlayerInputComponent->BindAction("Jump",IE_Pressed,this,&ASCharacter::Jump);
 	PlayerInputComponent->BindAction("PrimaryAttack",IE_Pressed,this, &ASCharacter::PrimaryAttack);
 
+	PlayerInputComponent->BindAction("PrimaryInteract",IE_Pressed,this,&ASCharacter::PrimaryInteract);
+
 }
 
 void ASCharacter::MoveForward(float X)
@@ -74,15 +79,20 @@ void ASCharacter::MoveRight(float X)
 	AddMovementInput(RightVector,X);
 }
 
-void ASCharacter::PrimaryAttack()
+void ASCharacter::PrimaryAttack() const
 {
-	FVector HandLocation = GetMesh()->GetSocketLocation("Muzzle_01");
+	const FVector HandLocation = GetMesh()->GetSocketLocation("Muzzle_01");
 	
 	const FTransform SpawnTM = FTransform(GetActorRotation(), HandLocation);
 	FActorSpawnParameters SpawnParameters;
 	SpawnParameters.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
 	
 	GetWorld()->SpawnActor<AActor>(ProjectileClass, SpawnTM, SpawnParameters);
+}
+
+void ASCharacter::PrimaryInteract() const
+{
+	InteractionComponent->PrimaryInteract();
 }
 
 
